@@ -2,8 +2,6 @@
 import scrapy
 from yinyue.items import YinyueItem
 import json
-import re
-import urllib.parse
 class WangyiSpider(scrapy.Spider):
     name = 'wangyi'
     allowed_domains = ['163.com']
@@ -21,10 +19,11 @@ class WangyiSpider(scrapy.Spider):
     def getjson(self,response):
         item = response.meta['item']
         str = json.loads(response.text)
+        print('*'*100)
         item['music_id'] = str['result']['songs'][0]['id']
         item['music_singer'] = str['result']['songs'][0]['artists'][0]['name']
         item['music_name'] = str['result']['songs'][0]['name']
-        item['music_img'] = str['result']['songs'][0]['artists'][0]['picUrl']
+        item['music_img'] = str['result']['songs'][0]['album']['picUrl']
         item['music_url'] = 'http://music.163.com/song/media/outer/url?id={}.mp3'.format(item['music_id'])
         print(item['music_url'])
         yield item
